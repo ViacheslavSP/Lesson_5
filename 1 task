@@ -1,0 +1,120 @@
+import java.util.ArrayList;
+
+public class Animal {
+    private String name;
+    private int distance;
+    private boolean canRun, canSwim;
+    private static int animalCount = 0;
+    private static int catCount = 0;
+    private static int dogCount = 0;
+
+    public Animal(String name, int distance, boolean canRun, boolean canSwim) {
+        this.name = name;
+        this.distance = distance;
+        this.canRun = canRun;
+        this.canSwim = canSwim;
+        animalCount++;
+    }
+
+    public void run(int length) {
+        if (canRun && distance >= length) {
+            System.out.println(name + " пробежал " + length + " м.");
+        } else {
+            System.out.println(name + " не может пробежать " + length + " м.");
+        }
+    }
+
+    public void swim(int length) {
+        if (canSwim && distance >= length) {
+            System.out.println(name + " проплыл " + length + " м.");
+        } else {
+            System.out.println(name + " не может проплыть " + length + " м.");
+        }
+    }
+
+    public static void printAnimalCount() {
+        System.out.println("Всего животных: " + animalCount);
+    }
+
+    public static void printCatCount() {
+        System.out.println("Всего котов: " + catCount);
+    }
+
+    public static void printDogCount() {
+        System.out.println("Всего собак: " + dogCount);
+    }
+}
+
+public class Cat extends Animal {
+    private boolean hunger;
+    private int foodInBowl;
+    private static ArrayList<Cat> cats = new ArrayList<>();
+
+    public Cat(String name, int distance) {
+        super(name, distance, true, false);
+        catCount++;
+        this.hunger = true;
+        this.foodInBowl = 0;
+        cats.add(this);
+    }
+
+    public void eat(int food) {
+        if (foodInBowl >= food) {
+            foodInBowl -= food;
+            hunger = false;
+            System.out.println(name + " съел " + food + " еды.");
+        } else {
+            System.out.println(name + " не может съесть " + food + " еды, в миске только " + foodInBowl + " еды.");
+        }
+    }
+
+    public static void addFoodToBowl(int food) {
+        for (Cat cat : cats) {
+            cat.foodInBowl += food;
+        }
+    }
+
+    public static void printCatHungerStatus() {
+        for (Cat cat : cats) {
+            if (cat.hunger) {
+                System.out.println(cat.name + " голоден.");
+            } else {
+                System.out.println(cat.name + " сыт.");
+            }
+        }
+    }
+}
+
+public class Dog extends Animal {
+    public Dog(String name, int distance) {
+        super(name, distance, true, true);
+        dogCount++;
+    }
+}
+
+public class Main {
+    public static void main(String[] args) {
+        Cat cat1 = new Cat("Мурзик", 200);
+        Cat cat2 = new Cat("Барсик", 200);
+        Cat cat3 = new Cat("Васька", 200);
+        Cat.addFoodToBowl(10);
+        Cat.printCatHungerStatus();
+
+        cat1.eat(15);
+        cat2.eat(10);
+        cat3.eat(5);
+        Cat.printCatHungerStatus();
+
+        Dog dog1 = new Dog("Бобик", 500);
+        Dog dog2 = new Dog("Шарик", 500);
+        Animal.printAnimalCount();
+        Animal.printCatCount();
+        Animal.printDogCount();
+
+        dog1.run(150);
+        dog2.swim(10);
+
+        System.out.println("Бобик пробежал 150 м.");
+        System.out.println("Шарик проплыл 10 м.");
+    }
+}
